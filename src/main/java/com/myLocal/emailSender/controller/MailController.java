@@ -17,7 +17,7 @@ public class MailController {
 
     @GetMapping("/sendMail")
     public ResponseEntity<String> sendMail(){
-        mailService.sendNewMail("meettopalak@gmail.com", "Subject right here", "Body right there!");
+        mailService.sendNewMail("xxxxxx@gmail.com", "Subject right here", "Body right there!");
         return ResponseEntity.ok("Done");
     }
     @PostMapping("/sendMailWith")
