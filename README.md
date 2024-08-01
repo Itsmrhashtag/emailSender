@@ -37,12 +37,12 @@ mvn spring-boot:run
 ```bash
 cd ../frontend
 ```
-###Install dependencies:
+### Install dependencies:
 
 ```bash
 npm install
 ```
-###Run the frontend application:
+### Run the frontend application:
 
 ```bash
 npm start
