@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ADD8E6;
+        }
+
+        .form {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #ffffff;
+            --main-color: #333333;
+            padding: 20px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--main-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .title {
+            color: var(--font-color);
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .title span {
+            color: var(--font-color-sub);
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--font-color);
+            margin-bottom: 5px;
+            align-self: flex-start;
+        }
+
+        .input {
+            width: 100%;
+            max-width: 350px;
+            height: 40px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 2px 2px var(--main-color);
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--font-color);
+            padding: 8px 12px;
+            outline: none;
+        }
+
+        .input::placeholder {
+            color: var(--font-color-sub);
+            opacity: 0.8;
+        }
+
+        .input:focus {
+            border: 2px solid var(--input-focus);
+        }
+
+        .button-confirm {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 150px;
+            height: 40px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 2px 2px var(--main-color);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--font-color);
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .button-confirm:hover {
+            background-color: var(--input-focus);
+            color: #ffffff;
+        }
+
+        .button-confirm:active {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(2px);
+        }
+    </style>
+</head>
+<body>
+    <form class="form" id="emailForm">
+        <div class="title">Welcome,<br><span>send mail to HR</span></div>
+        <label for="to">To:</label>
+        <input type="email" id="to" name="to" class="input" required>
+        <label for="subject">Position:</label>
+        <input type="text" id="subject" name="subject" class="input" required>
+        <label for="companyName">Company Name:</label>
+        <input type="text" id="companyName" name="companyName" class="input" required>
+        <label for="hrName">HR Name:</label>
+        <input type="text" id="hrName" name="hrName" class="input" required>
+        
+        <button class="button-confirm" type="submit" id="sendButton">Send Email</button>
+    </form>
+    <script>
+        const sendButton = document.getElementById('sendButton');
+        const emailForm = document.getElementById('emailForm');
+
+        emailForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const to = document.getElementById('to').value;
+            const subject = document.getElementById('subject').value;
+            const companyName = document.getElementById('companyName').value;
+            const hrName = document.getElementById('hrName').value;
+
+            const data = {
+                to,
+                subject,
+                placeholders: {
+                    companyName,
+                    hrName
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:9090/sendMailWith', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Email sent successfully!');
+                } else {
+                    alert('Error sending email. Please check the API and data.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>
